@@ -1,0 +1,25 @@
+﻿@model Product
+@inject ImageStorageService Images
+
+@{
+    ViewData["Title"] = "Детайли";
+}
+
+<h1 class="h3">Детайли</h1>
+<hr />
+<div class="row">
+    <div class="col-md-5 mb-3">
+        <img src="@Images.ToWebPath(Model.ImagePath)" alt="@Model.Name" class="img-fluid rounded border"
+             onerror="this.onerror=null;this.src='/images/tent-placeholder.svg';" />
+    </div>
+    <div class="col-md-7">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Price)</dt>
+            <dd class="col-sm-9">@Model.Price.ToString("0.00") лв.</dd>
+        </dl>
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Редакция</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">Назад към списъка</a>
+    </div>
+</div>
