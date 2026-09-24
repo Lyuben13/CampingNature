@@ -21,6 +21,15 @@ body {
   margin-bottom: 60px;
 }
 
+.login-page {
+  background-image: url('../images/back.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
 .hero-section {
   background: linear-gradient(135deg, #2d5016 0%, #4a7c23 100%);
   color: white;

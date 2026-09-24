@@ -113,6 +113,8 @@ StyleCopReport.xml
 *.svclog
 *.scc
 
+printf "\n# Local SQLite database\nMVC.Intro/App_Data/*.db\nMVC.Intro/App_Data/*.db-shm\nMVC.Intro/App_Data/*.db-wal\n" >> .gitignore
+
 # Chutzpah Test files
 _Chutzpah*
 
@@ -416,3 +418,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+MVC.Intro/App_Data/

@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MVC.Intro.Models;
 
 namespace MVC.Intro.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<Users>
     {
         public string DbPath { get; }
 
@@ -15,9 +16,26 @@ namespace MVC.Intro.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "products.db");
+            DbPath = GetDatabasePath();
+        }
+
+        public static string GetDatabasePath(string? contentRoot = null)
+        {
+            var root = contentRoot;
+            if (string.IsNullOrEmpty(root))
+            {
+                root = Directory.GetCurrentDirectory();
+                var intro = Path.Combine(root, "MVC.Intro");
+                if (!Directory.Exists(Path.Combine(root, "wwwroot")) &&
+                    Directory.Exists(Path.Combine(intro, "wwwroot")))
+                {
+                    root = intro;
+                }
+            }
+
+            var dir = Path.Combine(root, "App_Data");
+            Directory.CreateDirectory(dir);
+            return Path.Combine(dir, "products.db");
         }
 
         public DbSet<Product> Products { get; set; } = null!;

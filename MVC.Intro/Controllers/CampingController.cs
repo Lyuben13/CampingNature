@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVC.Intro.Data;
 
 namespace MVC.Intro.Controllers
@@ -15,7 +16,8 @@ namespace MVC.Intro.Controllers
         public IActionResult Index()
         {
             var tents = _context.CampingTents
-                .ToList()
+                .AsNoTracking()
+                .AsEnumerable()
                 .OrderBy(t => t.Price)
                 .ToList();
 

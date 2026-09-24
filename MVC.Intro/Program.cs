@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MVC.Intro.Data;
+using MVC.Intro.Models;
 using MVC.Intro.Services;
 
 namespace MVC.Intro
@@ -14,7 +17,30 @@ namespace MVC.Intro
             builder.Services.AddScoped<ImageStorageService>();
             builder.Services.AddDbContext<AppDbContext>();
 
+            builder.Services.AddIdentity<Users, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
 
             if (!app.Environment.IsDevelopment())
             {
@@ -27,6 +53,7 @@ namespace MVC.Intro
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
